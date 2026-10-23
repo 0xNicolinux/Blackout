@@ -16,7 +16,6 @@ let mus,mg,st=0,nT=0,nbuf,radioScreenDraw=()=>{},radioPowerButton,radioPrevButto
 function mv(f,t,d,ty,v){const o=ac.createOscillator(),g=ac.createGain();o.type=ty;o.frequency.setValueAtTime(f,t);g.gain.setValueAtTime(v,t);g.gain.exponentialRampToValueAtTime(.0001,t+d);o.connect(g);g.connect(mg);o.start(t);o.stop(t+d+.02);return o}
 function radioVolume(){if(!mg)return;const v=S&&S.radioOn&&!S.tape ? .3 : 0;try{mg.gain.setTargetAtTime(v,ac.currentTime,.06)}catch(e){mg.gain.value=v}}
 function syncInternAudio(restart=false){if(!internAudio||!internTracks.length)return;if(restart||!internAudio.src){internAudio.src=internTracks[internTrackIndex].url;internAudio.currentTime=0}if(!S||!S.radioOn||!S.tape||!running||paused){internAudio.pause();return}if(internAudio.paused)internAudio.play().catch(()=>msg("O navegador bloqueou o áudio. Ligue o rádio novamente para tentar."))}
-function chooseMusicFolder(){const input=$("musicFolder");if(input){input.value="";input.click()}}
 function ensureInternAudio(){if(internAudio)return;internAudio=new Audio();internAudio.volume=.72;internAudio.preload="auto";internAudio.addEventListener("ended",()=>{if(!internTracks.length)return;internTrackIndex=(internTrackIndex+1)%internTracks.length;internHasPlayed=true;syncInternAudio(true);radioScreenDraw()})}
 function setInternTracks(list,ownedUrls=[]){if(internAudio)internAudio.pause();internTrackUrls.forEach(u=>URL.revokeObjectURL(u));internTrackUrls=ownedUrls;internTracks=list;internTrackIndex=0;internHasPlayed=false;if(!internTracks.length)return;ensureInternAudio();internAudio.src=internTracks[0].url;radioScreenDraw();syncInternAudio(true)}
 function loadDefaultMusic(){fetch(new URL("musica/playlist.json",document.baseURI)).then(r=>{if(!r.ok)throw new Error("playlist indisponível");return r.json()}).then(data=>{const tracks=(Array.isArray(data.tracks)?data.tracks:[]).filter(p=>typeof p==="string"&&/\\.(mp3|ogg|wav|m4a|aac|webm)$/i.test(p)).map(p=>({name:p.split("/").pop(),url:new URL("musica/"+p.split("/").map(encodeURIComponent).join("/"),document.baseURI).href}));if(!tracks.length){defaultMusicStatus="empty";return}setInternTracks(tracks);defaultMusicStatus="ready"}).catch(()=>{defaultMusicStatus="unavailable"})}
@@ -378,7 +377,6 @@ function lockReq(){try{const p=ren.domElement.requestPointerLock();if(p&&p.catch
 document.addEventListener("pointerlockerror",()=>lockOK=false);
 document.addEventListener("pointerlockchange",()=>{if(document.pointerLockElement)lockSeen=1;else if(lockSeen&&running&&!paused&&!S.done)pause(true)});
 $("bplay").onclick=start;$("brules").onclick=()=>show("rules");$("bcred").onclick=()=>show("creds");document.querySelectorAll(".back").forEach(b=>b.onclick=()=>show("menu"));
-$("musicFolder").addEventListener("change",e=>loadInternMusic(e.target.files));
 $("pres").onclick=resume;$("prst").onclick=()=>{start()};$("pmen").onclick=toMenu;$("wag").onclick=start;$("wmen").onclick=toMenu;
 /* ---------- input ---------- */
 function look(dx,dy){yaw-=dx*.0022;pitch=Math.max(-1.3,Math.min(1.3,pitch-dy*.0022))}
