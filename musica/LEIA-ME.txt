@@ -1,0 +1,12 @@
+Coloque suas faixas nesta pasta em MP3, OGG ou WAV (também aceita M4A, AAC e WebM).
+
+No GitHub Pages, as faixas desta pasta são carregadas automaticamente. Antes de
+publicar novas músicas, execute `npm run build` para atualizar playlist.json e
+BLACKOUT.js; envie os dois arquivos gerados junto com a pasta musica.
+
+Ligue o rádio e insira a fita do estagiário. As faixas tocam em ordem alfabética
+e repetem; use os botões do rádio para ir para a faixa anterior ou próxima.
+O rádio precisa estar ligado para tocar; desligá-lo pausa a faixa.
+
+Ao abrir o HTML diretamente no computador, o navegador pode bloquear o índice
+automático por segurança. Nesse caso, escolha a pasta musica quando solicitado.
