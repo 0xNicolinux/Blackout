@@ -283,19 +283,12 @@ function build(){
  for(const x of [-2.7,2.7])D(C(.055,3.3,waterPipeColor,{metalness:.38,roughness:.46}),x,3.24,0).rotation.x=Math.PI/2;
  for(const x of [-2.7,0,2.7])for(const z of [-1.65,1.65])D(B(.035,.2,.035,0x68747b),x,3.38,z);
  for(const x of [-2.7,2.7])for(const z of [-1.65,1.65])D(B(.13,.13,.13,0x1c6e9f,{metalness:.42,roughness:.42}),x,3.24,z);
- // Duas alimentações agora ficam na parede lateral vazia e sobem até a rede do teto.
- // Os ramais cruzam o teto e se conectam aos cantos esquerdos do circuito fechado.
+ // Dois canos simples saem da parede lateral, seguem pelo teto e alimentam o circuito.
  [-1.65,1.65].forEach(z=>{
-  D(C(.075,2.08,waterPipeColor,{metalness:.42,roughness:.42}),-3.94,2.20,z);
+  // Luva de passagem na parede e tubo reto até o canto da rede.
+  D(C(.075,.18,waterPipeColor,{metalness:.42,roughness:.42}),-3.96,3.24,z).rotation.z=Math.PI/2;
   D(C(.075,1.24,waterPipeColor,{metalness:.42,roughness:.42}),-3.32,3.24,z).rotation.z=Math.PI/2;
-  D(C(.105,.09,0x1c6e9f,{metalness:.48,roughness:.4}),-2.7,3.24,z).rotation.z=Math.PI/2;
-  D(C(.12,.045,0x1c6e9f,{metalness:.48,roughness:.4}),-3.99,1.16,z).rotation.z=Math.PI/2;
-  D(C(.035,.19,waterPipeColor,{metalness:.4}),-3.845,1.16,z).rotation.z=Math.PI/2;
-  const valve=new THREE.Mesh(new THREE.TorusGeometry(.105,.018,6,12),new THREE.MeshStandardMaterial({color:0x258ec0,metalness:.55,roughness:.38}));
-  valve.rotation.y=Math.PI/2;valve.position.set(-3.75,1.16,z);scene.add(valve);
-  D(B(.018,.014,.17,0x9ab5c2),-3.73,1.16,z);D(B(.018,.17,.014,0x9ab5c2),-3.73,1.16,z);
-  const hub=C(.028,.04,0x9ab5c2);hub.rotation.z=Math.PI/2;D(hub,-3.71,1.16,z);
-  const inlet=txt("REDE DE ÁGUA",.62,.11,"#174465","#e6f4fc",14);inlet.rotation.y=Math.PI/2;inlet.position.set(-3.99,.88,z);scene.add(inlet);
+  D(C(.105,.10,0x1c6e9f,{metalness:.48,roughness:.4}),-2.7,3.24,z).rotation.z=Math.PI/2;
  });
  D(B(3.25,.09,.16,0x59636c),0,3.31,-3.94);[-1.5,0,1.5].forEach(x=>D(B(.035,.16,.035,0x747e84),x,3.39,-3.94));
  // Guarded wall fan, mechanically linked to the ventilation circuit.
