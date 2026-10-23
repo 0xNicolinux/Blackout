@@ -1,12 +1,9 @@
-Coloque suas faixas nesta pasta em MP3, OGG ou WAV (também aceita M4A, AAC e WebM).
+Coloque as faixas MP3, OGG, WAV, M4A, AAC ou WebM nesta pasta.
 
-No GitHub Pages, as faixas desta pasta são carregadas automaticamente. Antes de
-publicar novas músicas, execute `npm run build` para atualizar playlist.json e
-BLACKOUT.js; envie os dois arquivos gerados junto com a pasta musica.
+No GitHub Pages, o rádio carrega automaticamente as faixas listadas em playlist.json.
+Quando novas músicas forem enviadas para esta pasta, a automação atualiza a lista e o
+script do jogo. Ligue o rádio e insira a fita do estagiário; use os botões para trocar
+as faixas. O áudio começa após a interação do jogador, conforme as regras do navegador.
 
-Ligue o rádio e insira a fita do estagiário. As faixas tocam em ordem alfabética
-e repetem; use os botões do rádio para ir para a faixa anterior ou próxima.
-O rádio precisa estar ligado para tocar; desligá-lo pausa a faixa.
-
-Ao abrir o HTML diretamente no computador, o navegador pode bloquear o índice
-automático por segurança. Nesse caso, escolha a pasta musica quando solicitado.
+Para abrir localmente, use um servidor HTTP (por exemplo, ABRIR JOGO.bat). Abrir o HTML
+diretamente como file:// bloqueia o carregamento automático de arquivos por segurança.
