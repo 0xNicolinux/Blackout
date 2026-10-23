@@ -236,10 +236,12 @@ function build(){
  };
  makeOfficeBin(-3.62,3.65);
  makeRecyclingBin(-2.95,3.65);
- // A tidy ceiling fire-suppression main replaces the unrelated brown pipe and loose drops.
- for(const z of [-1.65,1.65])D(C(.045,5.4,0xc44f3d),0,3.24,z).rotation.z=Math.PI/2;
- for(const x of [-2.7,2.7])D(C(.045,3.3,0xc44f3d),x,3.24,0).rotation.x=Math.PI/2;
+ // Blue water mains form a closed loop and feed each sprinkler head.
+ const waterPipeColor=0x278fca;
+ for(const z of [-1.65,1.65])D(C(.055,5.4,waterPipeColor,{metalness:.38,roughness:.46}),0,3.24,z).rotation.z=Math.PI/2;
+ for(const x of [-2.7,2.7])D(C(.055,3.3,waterPipeColor,{metalness:.38,roughness:.46}),x,3.24,0).rotation.x=Math.PI/2;
  for(const x of [-2.7,0,2.7])for(const z of [-1.65,1.65])D(B(.035,.2,.035,0x68747b),x,3.38,z);
+ for(const x of [-2.7,2.7])for(const z of [-1.65,1.65])D(B(.13,.13,.13,0x1c6e9f,{metalness:.42,roughness:.42}),x,3.24,z);
  D(B(3.25,.09,.16,0x59636c),0,3.31,-3.94);[-1.5,0,1.5].forEach(x=>D(B(.035,.16,.035,0x747e84),x,3.39,-3.94));
  // Guarded wall fan, mechanically linked to the ventilation circuit.
  const fr=D(M(new THREE.TorusGeometry(.35,.04,8,20),0x555b63),2.8,2.7,-3.93);fanB=new THREE.Group();fanB.position.set(2.8,2.7,-3.9);
@@ -305,10 +307,10 @@ function build(){
  CX("CHARADA|DO TESTE FINAL",.9,.7,"#fff3b0","#222",22,[3.97,1.6,.2],[0,-q],"Ler charada de comissionamento","O último passo","Sou a carga de ensaio. Não sou a fonte nem um dos dois circuitos de serviço. Só posso ser ligado depois que <b>VENTILAÇÃO</b> e <b>ILUMINAÇÃO</b> forem testadas. Qual circuito sou? Que pista isso dá sobre a ordem?");
  CX("EXTINTOR|Puxe o pino|— Faustão",.46,.34,"#c0392b","#fff",20,[2.0,1.3,-3.97],[0,0],"Ler placa do extintor","Extintor de incêndio","Puxe o pino e aponte para a base do fogo. Uma carga; use apenas se houver curto no quadro. Sprinklers entram após 15 segundos.");
  CX("IDENTIFIQUE|OS RAMAIS",.5,.35,"#ddd","#222",18,[-1.9,1.2,-3.97],[0,0],"Ler etiqueta técnica","Identificação dos disjuntores","As etiquetas se soltaram. Use o multímetro em cada disjuntor para descobrir seu nome e anote-o ao lado de uma das quatro posições. Depois, volte às placas e cruze as informações.");
- SPH=[[-2.7,-1.65],[2.7,-1.65],[-2.7,1.65],[2.7,1.65]];rvx=new Float32Array(260);rvz=new Float32Array(260);const rp=new Float32Array(260*6);for(let i=0;i<260;i++){const h=SPH[i%4],y=Math.random()*2.75,a=Math.random()*6.28,s=.08+Math.random()*.38;rvx[i]=Math.cos(a)*s;rvz[i]=Math.sin(a)*s;const x=h[0]+rvx[i]*.35,z=h[1]+rvz[i]*.35;rp.set([x,y,z,x,y+.25,z],i*6)}
+ const waterOutletY=2.54;SPH=[[-2.7,-1.65],[2.7,-1.65],[-2.7,1.65],[2.7,1.65]];rvx=new Float32Array(260);rvz=new Float32Array(260);const rp=new Float32Array(260*6);for(let i=0;i<260;i++){const h=SPH[i%4],y=Math.random()*(waterOutletY-.25),a=Math.random()*6.28,s=.08+Math.random()*.38;rvx[i]=Math.cos(a)*s;rvz[i]=Math.sin(a)*s;const x=h[0]+rvx[i]*.35,z=h[1]+rvz[i]*.35;rp.set([x,y,z,x,y+.25,z],i*6)}
  rain=new THREE.LineSegments(new THREE.BufferGeometry(),new THREE.LineBasicMaterial({color:0x9fd8ff,transparent:true,opacity:.7}));rain.geometry.setAttribute("position",new THREE.BufferAttribute(rp,3));rain.visible=false;rain.frustumCulled=false;scene.add(rain);
  pud=new THREE.Mesh(new THREE.PlaneGeometry(7.4,7.4),new THREE.MeshBasicMaterial({color:0x3aa0ff,transparent:true,opacity:0}));pud.rotation.x=-Math.PI/2;pud.position.y=.02;scene.add(pud);
- SPH.forEach(([x,z])=>{D(C(.025,.22,0x788893),x,3.09,z);D(C(.09,.035,0x3a9cac),x,2.98,z);D(C(.055,.025,0xe4b94f),x,2.94,z)});
+ SPH.forEach(([x,z])=>{D(C(.032,.55,waterPipeColor,{metalness:.4,roughness:.45}),x,2.91,z);D(C(.072,.09,0x1c6e9f,{metalness:.42,roughness:.42}),x,2.63,z);D(C(.09,.045,0x3a9cac,{metalness:.35}),x,2.59,z);D(C(.055,.025,0xe4b94f),x,2.54,z)});
  arcL=new THREE.Line(new THREE.BufferGeometry().setFromPoints(Array.from({length:10},()=>new THREE.Vector3())),new THREE.LineBasicMaterial({color:0xcff8ff}));arcL.visible=false;arcL.frustumCulled=false;scene.add(arcL);arcP=new THREE.PointLight(0x88ccff,0,6);scene.add(arcP);
  D(B(.9,.7,.5,0x3d6a8a),-2.8,.35,-3.6);D(txt("GERADOR|AUXILIAR",.7,.25,"#222","#ffd800",26),-2.8,.4,-3.34);Object.entries(wireEnds).forEach(([k,x])=>{const socket=D(C(.045,.025,wireColors[k]),x,.65,-3.32);socket.rotation.x=Math.PI/2});
  D(B(.62,1.0,.05,0xc0392b),2.3,.53,-3.94);
@@ -348,7 +350,7 @@ function emerg(dt){
  if(S.fire){S.fireT+=dt;const growth=Math.min(S.fireT/15,1);fire.scale.set(.28+growth*1.28,.35+growth*1.6,.28+growth*.55);fire.children.forEach(c=>{if(c.isMesh&&growth>=c.userData.startsAt)c.visible=true});if(S.fireT>8&&!S.smk){S.smk=1;rad("Marta: Fumaça! Apaguem isso antes que os sprinklers disparem!")}if(S.fireT>15)sprink()}
  if(S.spr>0){S.spr-=dt;if(Math.random()<dt*4)noise(.4,.07,2000);if(S.spr<=0){S.wet=10;msg("Sprinklers desligados. O quadro continua molhado...")}}else if(S.wet>0)S.wet-=dt;
  rain.visible=S.spr>0;const w=S.spr>0?1:Math.max(0,S.wet/10);pud.material.opacity=w*.45;floorM.material.color.setRGB(.165-.07*w,.176+.2*w,.2+.45*w);floorM.material.roughness=.7-.5*w;
- if(rain.visible){const p=rain.geometry.attributes.position;for(let i=0;i<p.count;i+=2){const j=i>>1;let y=p.getY(i)-7*dt,x=p.getX(i)+rvx[j]*dt,z=p.getZ(i)+rvz[j]*dt;if(y<0){const h=SPH[j%4],a=Math.random()*6.28,s=.6+Math.random()*1.4;x=h[0];z=h[1];y=3.2;rvx[j]=Math.cos(a)*s;rvz[j]=Math.sin(a)*s}p.setXYZ(i,x,y,z);p.setXYZ(i+1,x,y+.25,z)}p.needsUpdate=true}
+ if(rain.visible){const p=rain.geometry.attributes.position;for(let i=0;i<p.count;i+=2){const j=i>>1;let y=p.getY(i)-7*dt,x=p.getX(i)+rvx[j]*dt,z=p.getZ(i)+rvz[j]*dt;if(y<0){const h=SPH[j%4],a=Math.random()*6.28,s=.6+Math.random()*1.4;x=h[0];z=h[1];y=waterOutletY-.25;rvx[j]=Math.cos(a)*s;rvz[j]=Math.sin(a)*s}p.setXYZ(i,x,y,z);p.setXYZ(i+1,x,y+.25,z)}p.needsUpdate=true}
  if(S.shk>0){S.shk-=dt;$("fx").style.opacity=Math.max(0,S.shk*1.4)}else $("fx").style.opacity=0}
 function shock(){if(S.shk>0)return;S.t+=15;S.shk=.7;zapArc(0,1.5,-3.5,P.x,1.3,P.z-.8,220);setTimeout(()=>zapArc(-.4,1.9,-3.5,P.x+.2,1.1,P.z-.7,150),130);S.inc++;buzz();noise(.5,.3,300);msg("ZZZAP! Painel molhado! +15 segundos.");rad("Mauro: Eu avisei! (não avisei, mas devia)")}
 function press2(k,t){const b=BR[k];if(S.spr>0||S.wet>0)return shock();
