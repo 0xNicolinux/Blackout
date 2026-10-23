@@ -49,7 +49,7 @@ function build(){
  const wallText=(label,w,h,bg,fg,size,x,y,z)=>{const m=txt(label,w,h,bg,fg,size);m.position.set(x,y,z);m.rotation.y=-Math.PI/2;scene.add(m);return m};
  scene=new THREE.Scene();scene.background=new THREE.Color(0x05070d);scene.fog=new THREE.Fog(0x05070d,6,16);
  inter=[];lamps=[];lampM=[];
- S={exam:0,prog:0,on:{},err:null,fire:0,dark:0,tools:{},sel:null,t:0,inc:0,done:0,card:0,rt:20,ri:0,fireT:0,spr:0,wet:0,shk:0,radioOn:0,tape:0,safetyBroken:0};radioVolume();syncInternAudio();
+ S={exam:0,prog:0,on:{},err:null,fire:0,dark:0,tools:{},sel:null,epi:0,t:0,inc:0,done:0,card:0,rt:20,ri:0,fireT:0,spr:0,wet:0,shk:0,radioOn:0,tape:0,safetyBroken:0};radioVolume();syncInternAudio();
  yaw=0;pitch=0;P={x:0,z:2.5};
  amb=new THREE.AmbientLight(0x6677aa,.5);scene.add(amb);
  [[-2,0],[2,0],[0,-2.4]].forEach((p,i)=>{const l=new THREE.PointLight(0xfff2d0,.9,10);l.position.set(p[0],3.2,p[1]);if(i===2){l.castShadow=true;l.shadow.mapSize.set(512,512)}scene.add(l);lamps.push(l);const f=B(.9,.08,.25,0xdddddd,{emissive:0xfff2d0,emissiveIntensity:1});f.position.set(p[0],3.45,p[1]);scene.add(f);lampM.push(f)});
@@ -211,7 +211,37 @@ function build(){
   [3.53,2.05,-2.2,.26,.24,.48,0xb8884a],[3.83,2.05,-2.2,.26,.24,.48,0x4a6a8a]
  ].forEach(([x,y,z,w,h,d,c])=>D(B(w,h,d,c),x,y,z));
  D(B(.07,2,.08,0x303943),3.36,1,-3);D(B(.07,2,.08,0x303943),3.36,1,-.6);D(B(.07,2,.08,0x303943),3.99,1,-3);D(B(.07,2,.08,0x303943),3.99,1,-.6);const rackTag=wallText("ESTOQUE DE PEÇAS",1.25,.16,"#27343d","#e2b653",18,3.81,2.45,-1.8);
- [-.7,.1].forEach(z=>{D(B(.5,2,.75,0x315044),-3.7,1,z);D(B(.025,.32,.05,0xd6d8d4),-3.43,1.2,z+.25)});const lockerTag=D(txt("FERRAMENTAS",.62,.16,"#263b32","#dce8dd",16),-3.97,2.28,-.3);lockerTag.rotation.y=Math.PI/2;
+ // Armário de ferramentas interativo: portas articuladas e luvas isolantes em uma prateleira interna.
+  D(B(.06,1.96,1.54,0x253a32),-3.97,1,-.3);
+  D(B(.42,.035,1.43,0x657668),-3.72,.48,-.3);D(B(.42,.035,1.43,0x657668),-3.72,1.28,-.3);
+  const lockerDoors=[];let lockerOpen=false;
+  [[-.7,-1.075,1],[.1,.475,-1]].forEach(([z,hingeZ,dir])=>{
+   const door=new THREE.Group();door.position.set(-3.95,1,hingeZ);
+   const panel=B(.5,1.96,.75,0x315044);panel.position.set(.25,0,dir*.375);door.add(panel);
+   const handle=B(.035,.32,.05,0xd6d8d4);handle.position.set(.52,.2,dir*.25);door.add(handle);
+   scene.add(door);lockerDoors.push({door,dir});addI(door);
+   door.userData={hint:()=>lockerOpen?"E — Fechar armário":"E — Abrir armário",e:()=>toggleLocker(),click:()=>toggleLocker()};
+  });
+  const gloves=new THREE.Group();gloves.visible=false;
+  const gloveHand=(z)=>{
+   const hand=new THREE.Group();
+   const palm=B(.05,.11,.13,0xf2c94c);palm.position.y=.11;hand.add(palm);
+   const cuff=B(.055,.045,.14,0x398ca4);cuff.position.set(0,.035,0);hand.add(cuff);
+   [-.048,-.016,.016,.048].forEach(dz=>{const finger=C(.018,.075,0xf2c94c);finger.position.set(0,.205,dz);hand.add(finger)});
+   const thumb=B(.045,.085,.04,0xf2c94c);thumb.position.set(0,.12,.083);thumb.rotation.x=-.42;hand.add(thumb);
+   hand.position.set(-3.52,.48,z);gloves.add(hand);
+  };
+  gloveHand(-.48);gloveHand(-.12);scene.add(gloves);
+  gloves.userData={hint:"E — Pegar luvas isolantes",e:()=>pickGloves(),click:()=>pickGloves()};
+  const pickGloves=()=>{if(S.epi)return;S.epi=1;gloves.visible=false;delI(gloves);scene.remove(gloves);hud();beep(660,.1);msg("EPI equipado: luvas isolantes. O quadro ainda precisa secar.")};
+  addI(gloves);
+  const toggleLocker=()=>{
+   lockerOpen=!lockerOpen;lockerDoors.forEach(({door,dir})=>{door.rotation.y=lockerOpen?dir*1.12:0});
+   gloves.visible=lockerOpen&&!S.epi;
+   if(lockerOpen)card("Charada do EPI","Cubrem as mãos e ajudam a reduzir o risco elétrico, mas não desligam a energia. O que são?<br><br><b>Resposta: luvas isolantes.</b> EPI é uma barreira de proteção; não substitui os procedimentos seguros. No jogo, o quadro molhado continua bloqueado até secar.");
+   else msg("Armário fechado.");
+  };
+  const lockerTag=D(txt("FERRAMENTAS",.62,.16,"#263b32","#dce8dd",16),-3.97,2.28,-.3);lockerTag.rotation.y=Math.PI/2;
  // One workshop chair centered at the bench, with its back toward the open floor.
  const chairX=0,chairZ=-1.38;
  D(B(.5,.06,.5,0x303943),chairX,.52,chairZ);D(B(.5,.5,.06,0x303943),chairX,.8,chairZ+.22);D(C(.045,.5,0x666d75),chairX,.25,chairZ);D(B(.5,.045,.06,0x222),chairX,.03,chairZ);D(B(.06,.045,.5,0x222),chairX,.03,chairZ);
@@ -353,7 +383,7 @@ function emerg(dt){
  rain.visible=S.spr>0;const w=S.spr>0?1:Math.max(0,S.wet/10);pud.material.opacity=w*.45;floorM.material.color.setRGB(.165-.07*w,.176+.2*w,.2+.45*w);floorM.material.roughness=.7-.5*w;
  if(rain.visible){const p=rain.geometry.attributes.position;for(let i=0;i<p.count;i+=2){const j=i>>1;let y=p.getY(i)-7*dt,x=p.getX(i)+rvx[j]*dt,z=p.getZ(i)+rvz[j]*dt;if(y<0){const h=SPH[j%4],a=Math.random()*6.28,s=.6+Math.random()*1.4;x=h[0];z=h[1];y=waterOutletY-.25;rvx[j]=Math.cos(a)*s;rvz[j]=Math.sin(a)*s}p.setXYZ(i,x,y,z);p.setXYZ(i+1,x,y+.25,z)}p.needsUpdate=true}
  if(S.shk>0){S.shk-=dt;$("fx").style.opacity=Math.max(0,S.shk*1.4)}else $("fx").style.opacity=0}
-function shock(){if(S.shk>0)return;S.t+=15;S.shk=.7;zapArc(0,1.5,-3.5,P.x,1.3,P.z-.8,220);setTimeout(()=>zapArc(-.4,1.9,-3.5,P.x+.2,1.1,P.z-.7,150),130);S.inc++;buzz();noise(.5,.3,300);msg("ZZZAP! Painel molhado! +15 segundos.");rad("Mauro: Eu avisei! (não avisei, mas devia)")}
+function shock(){if(S.shk>0)return;if(S.epi){beep(660,.12,"sine",.05);msg("As luvas isolantes evitaram o choque. O quadro continua molhado: espere secar.");rad("Marta: EPI ajuda, mas não é passe livre para mexer no quadro!");return}S.t+=15;S.shk=.7;zapArc(0,1.5,-3.5,P.x,1.3,P.z-.8,220);setTimeout(()=>zapArc(-.4,1.9,-3.5,P.x+.2,1.1,P.z-.7,150),130);S.inc++;buzz();noise(.5,.3,300);msg("ZZZAP! Painel molhado! +15 segundos.");rad("Mauro: Eu avisei! (não avisei, mas devia)")}
 function press2(k,t){const b=BR[k];if(S.spr>0||S.wet>0)return shock();
  if(t==="multi"){if(!b.known){b.known=1;const m=txt(b.n,.46,.16,"#111","#ffd800",24);b.lb.material.map=m.material.map;b.lb.material.needsUpdate=true;beep(880,.1)}
   return msg("Multímetro: este é o "+b.n+". "+(S.on[k]&&S.err!==k?"Ligado, tensão estável.":S.err===k?"Tensão caótica! Corte com o alicate.":S.loose===k?"Borne solto! Reaperte com a chave de fenda.":SEQ[S.prog]===k?"12V estáveis: PRONTO para ligar.":"0V: ainda falta ligar algo antes."))}
@@ -366,7 +396,7 @@ function win(){S.done=1;S.look=1;S.dark=0;lights();beep(523,.3);setTimeout(()=>b
  const pl=new THREE.PointLight(0x22ff66,1.5,6);pl.position.set(0,2,-3);scene.add(pl);
  setTimeout(()=>{if(document.pointerLockElement)document.exitPointerLock();$("wt").innerHTML="“Você resolveu o problema. O RH ainda está tentando descobrir quem deixou o extintor vazio.”<br><br>Tempo: "+fmt(S.t)+" · Incidentes: "+S.inc;show("win")},2200)}
 function show(id){document.querySelectorAll(".scr").forEach(e=>e.classList.add("hide"));if(id)$(id).classList.remove("hide")}
-function getH(){return "<div class='sl own "+(S.sel?"":"sel")+"'><u>0</u>Mãos</div>"+TOOLS.map((t,i)=>"<div class='sl "+(S.tools[t[0]]?"own ":"")+(S.sel===t[0]?"sel":"")+"'><u>"+(i+1)+"</u>"+t[1]+"</div>").join("")}
+function getH(){return "<div class='sl own "+(S.sel?"":"sel")+"'><u>0</u>Mãos</div>"+TOOLS.map((t,i)=>"<div class='sl "+(S.tools[t[0]]?"own ":"")+(S.sel===t[0]?"sel":"")+"'><u>"+(i+1)+"</u>"+t[1]+"</div>").join("")+"<div class='sl "+(S.epi?"own":"")+"'> <u>"+(S.epi?"✓":"")+"</u>Luvas EPI</div>"}
 function hud(){
  const o=S.spr>0?"Sprinklers ligados! Água + eletricidade = choque. Espere ("+Math.ceil(S.spr)+"s)":S.wet>0?"Painel molhado. Espere secar ("+Math.ceil(S.wet)+"s)":S.prog>=4?"Missão concluída":S.err?(S.fire?"Fogo! Sprinklers em "+Math.ceil(15-S.fireT)+"s. Apague e desfaça a conexão":S.dark?"Pegue a lanterna e desfaça a conexão errada":"Desfaça a conexão errada (alicate)"):"Use as pistas para deduzir a ordem ("+S.prog+"/4)";
  $("ob").textContent="Objetivo: "+o;$("tm").textContent=fmt(S.t);$("tools").innerHTML=getH();
