@@ -1,0 +1,10 @@
+{
+  "name": "blackout-game",
+  "private": true,
+  "scripts": {
+    "build": "node scripts/generate-music-playlist.mjs && tsc -p tsconfig.json"
+  },
+  "devDependencies": {
+    "typescript": "^5.6.3"
+  }
+}

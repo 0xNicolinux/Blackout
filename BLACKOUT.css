@@ -1,0 +1,34 @@
+:root{--y:#ffd800;--c:#31e6ff;color-scheme:dark}
+*{box-sizing:border-box}html,body{margin:0;height:100%;background:#05070d;overflow:hidden;font-family:"Segoe UI",system-ui,sans-serif;color:#dfe8f2}
+canvas#g{position:fixed;inset:0}
+.hide{display:none!important}
+.scr{position:fixed;inset:0;z-index:20;display:flex;align-items:center;justify-content:center;text-align:center;background:rgba(5,7,13,.92);padding:env(safe-area-inset-top,0px) 16px env(safe-area-inset-bottom,0px)}
+#menu{background:radial-gradient(circle at 50% 40%,#10223a,#05070d 70%)}
+#bg{position:absolute;inset:0;width:100%;height:100%}
+.in{position:relative;display:flex;flex-direction:column;gap:14px;align-items:center;max-width:560px}
+h1{font:900 clamp(56px,13vw,130px)/1 Impact,"Arial Black",sans-serif;letter-spacing:.06em;margin:0;color:var(--y);text-shadow:0 0 12px var(--y),0 0 40px #ff9d00,3px 0 var(--c),-3px 0 #f0f;animation:fl 4s infinite}
+@keyframes fl{0%,88%,100%{opacity:1;transform:none}90%{opacity:.4;transform:translateX(-6px) skewX(8deg)}92%{opacity:1;transform:translateX(6px)}94%{opacity:.2}96%{opacity:1;transform:none}}
+.sub{color:#9fb3c8;margin:0 0 14px}
+button{font:700 18px "Segoe UI",sans-serif;letter-spacing:.12em;min-width:280px;padding:13px 20px;background:rgba(0,0,0,.5);color:var(--y);border:2px solid var(--y);cursor:pointer;transition:.15s}
+button:hover{background:var(--y);color:#000;box-shadow:0 0 24px var(--y),0 0 60px var(--c)}
+.pn{max-width:620px;text-align:left;background:#0b121c;border:2px solid var(--c);padding:22px 26px;box-shadow:0 0 30px rgba(49,230,255,.3);line-height:1.5;font-size:15px}
+.pn h2{margin:0 0 8px;color:var(--y);letter-spacing:.1em}.pn b{color:var(--c)}.pn button{margin-top:14px;min-width:0}
+#hud{position:fixed;inset:0;z-index:10;pointer-events:none}
+#ob{position:absolute;left:16px;top:calc(14px + env(safe-area-inset-top,0px));background:rgba(0,0,0,.55);border-left:3px solid var(--y);padding:7px 12px;max-width:46vw;font-size:14px}
+#tm{position:absolute;right:16px;top:calc(14px + env(safe-area-inset-top,0px));font:700 20px monospace;color:var(--c);background:rgba(0,0,0,.55);padding:5px 10px}
+#cross{position:absolute;left:50%;top:50%;width:6px;height:6px;margin:-3px;border-radius:50%;background:#fff;opacity:.8;box-shadow:0 0 6px #000}
+#hint{position:absolute;left:0;right:0;top:57%;text-align:center;font-size:16px;color:#fff;text-shadow:0 0 6px #000,0 0 6px #000}
+#msg{position:absolute;left:0;right:0;top:18%;text-align:center;font:800 clamp(18px,3vw,30px) "Segoe UI",sans-serif;color:var(--y);text-shadow:0 0 10px #000,0 0 18px #ff7a00;opacity:0;transition:opacity .3s;padding:0 20px}
+#msg.on{opacity:1}
+#card{position:absolute;left:50%;bottom:90px;transform:translateX(-50%);width:min(520px,92vw);background:#f4e9c8;color:#222;padding:14px 18px;border:2px solid #5a4a20;box-shadow:0 8px 30px #000;font-size:15px;line-height:1.45}
+#card i{display:block;margin-top:8px;font-size:12px;color:#755}#card p{margin:6px 0 0}
+#tools{position:absolute;left:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));display:flex;gap:6px}
+.sl{width:78px;padding:6px 4px;background:rgba(0,0,0,.6);border:2px solid #333;font-size:11px;text-align:center;color:#555}
+.sl.own{color:#cfe;border-color:#566}.sl.sel{border-color:var(--y);color:var(--y);box-shadow:0 0 12px var(--y)}.sl u{display:block;text-decoration:none;font:700 15px monospace}
+#menu::after{content:"";position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(0deg,rgba(0,0,0,.22) 0 1px,transparent 1px 3px),radial-gradient(circle,transparent 45%,rgba(0,0,0,.8))}
+h1{position:relative}h1::before,h1::after{content:attr(data-t);position:absolute;inset:0;mix-blend-mode:screen;opacity:0}
+h1::before{color:var(--c);animation:g1 3.1s infinite}h1::after{color:#f0f;animation:g2 2.6s infinite}
+@keyframes g1{0%,90%,100%{opacity:0}92%{opacity:.9;transform:translate(-6px,2px);clip-path:inset(10% 0 55% 0)}96%{opacity:.9;transform:translate(5px,-2px);clip-path:inset(60% 0 8% 0)}}
+@keyframes g2{0%,85%,100%{opacity:0}87%{opacity:.9;transform:translate(6px,-2px);clip-path:inset(50% 0 20% 0)}91%{opacity:.9;transform:translate(-5px,2px);clip-path:inset(5% 0 70% 0)}}
+#rad{position:absolute;left:50%;transform:translateX(-50%);top:30%;width:min(560px,92vw);text-align:center;background:rgba(0,0,0,.75);border:1px solid var(--c);padding:8px 14px;font-size:14px;color:#bfefff;opacity:0;transition:opacity .4s}#rad.on{opacity:1}
+#fx{position:fixed;inset:0;background:#cfe8ff;opacity:0;pointer-events:none}
