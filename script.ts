@@ -267,12 +267,25 @@ function build(){
  };
  makeOfficeBin(-3.62,3.65);
  makeRecyclingBin(-2.95,3.65);
- // Blue water mains form a closed loop and feed each sprinkler head.
+ // Ramal fechado dos sprinklers e duas alimentações que entram pela parede do fundo.
  const waterPipeColor=0x278fca;
  for(const z of [-1.65,1.65])D(C(.055,5.4,waterPipeColor,{metalness:.38,roughness:.46}),0,3.24,z).rotation.z=Math.PI/2;
  for(const x of [-2.7,2.7])D(C(.055,3.3,waterPipeColor,{metalness:.38,roughness:.46}),x,3.24,0).rotation.x=Math.PI/2;
  for(const x of [-2.7,0,2.7])for(const z of [-1.65,1.65])D(B(.035,.2,.035,0x68747b),x,3.38,z);
  for(const x of [-2.7,2.7])for(const z of [-1.65,1.65])D(B(.13,.13,.13,0x1c6e9f,{metalness:.42,roughness:.42}),x,3.24,z);
+ // Cada ramal sobe pela parede, faz a curva no teto e entra no circuito por um tê.
+ [-2.7,2.7].forEach(x=>{
+  D(C(.075,2.08,waterPipeColor,{metalness:.42,roughness:.42}),x,2.20,-3.94);
+  D(C(.075,2.30,waterPipeColor,{metalness:.42,roughness:.42}),x,3.24,-2.795).rotation.x=Math.PI/2;
+  D(C(.105,.09,0x1c6e9f,{metalness:.48,roughness:.4}),x,3.24,-1.65).rotation.x=Math.PI/2;
+  D(C(.12,.045,0x1c6e9f,{metalness:.48,roughness:.4}),x,1.16,-3.99).rotation.x=Math.PI/2;
+  D(C(.035,.16,waterPipeColor,{metalness:.4}),x,1.16,-3.84).rotation.x=Math.PI/2;
+  const valve=new THREE.Mesh(new THREE.TorusGeometry(.105,.018,6,12),new THREE.MeshStandardMaterial({color:0x258ec0,metalness:.55,roughness:.38}));
+  valve.position.set(x,1.16,-3.75);scene.add(valve);
+  D(B(.17,.014,.018,0x9ab5c2),x,1.16,-3.75);D(B(.014,.17,.018,0x9ab5c2),x,1.16,-3.75);
+  const hub=C(.028,.04,0x9ab5c2);hub.rotation.x=Math.PI/2;D(hub,x,1.16,-3.73);
+  const inlet=txt("REDE DE ÁGUA",.62,.11,"#174465","#e6f4fc",14);inlet.position.set(x,.88,-3.99);scene.add(inlet);
+ });
  D(B(3.25,.09,.16,0x59636c),0,3.31,-3.94);[-1.5,0,1.5].forEach(x=>D(B(.035,.16,.035,0x747e84),x,3.39,-3.94));
  // Guarded wall fan, mechanically linked to the ventilation circuit.
  const fr=D(M(new THREE.TorusGeometry(.35,.04,8,20),0x555b63),2.8,2.7,-3.93);fanB=new THREE.Group();fanB.position.set(2.8,2.7,-3.9);
