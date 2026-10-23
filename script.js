@@ -232,7 +232,7 @@ function build(){
  gloveHand(-.10);gloveHand(.18);scene.add(gloves);
  const toggleLockerDoor=(i)=>{
   lockerDoorOpen[i]=!lockerDoorOpen[i];
-  const {door,dir}=lockerDoors[i];door.rotation.y=lockerDoorOpen[i]?dir*1.08:0;
+  const {door,dir}=lockerDoors[i];door.rotation.y=lockerDoorOpen[i]?dir*.62:0;
   gloves.visible=!S.epi;
   msg(lockerDoorOpen[i]?(i===1?"Compartimento do EPI aberto. Pegue as luvas isolantes.":"Porta aberta; veja o aviso na outra porta para localizar as luvas."):"Porta do armário fechada.");
  };
